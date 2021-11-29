@@ -49,7 +49,8 @@
 (defcustom uncrustify-bin
   "uncrustify -q"
   "The command to run uncrustify."
-  :group 'uncrustify)
+  :group 'uncrustify
+  :type 'string)
 
 ;;; Functions:
 
