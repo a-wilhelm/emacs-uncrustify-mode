@@ -81,13 +81,13 @@
     (goto-char original-point)
     line))
 
-(defun uncrustify-invoke-command (lang start-in end-in)
+(defun uncrustify-invoke-command (lang start-in end-in &optional fragment)
   "Run uncrustify on the current region or buffer."
   (if lang
       (let ((start (or start-in (point-min)))
             (end   (or end-in   (point-max)))
             (original-line (uncrustify-point->line (point)))
-            (cmd (concat uncrustify-bin " -c " uncrustify-config-path " -l " lang))
+            (cmd (concat uncrustify-bin " -c " uncrustify-config-path " -l " lang (if fragment " --frag ")))
             (error-buf (get-buffer-create "*uncrustify-errors*")))
 
         (with-current-buffer error-buf (erase-buffer))
@@ -124,6 +124,12 @@
   (save-restriction
     (widen)
     (uncrustify-invoke-command (uncrustify-get-lang-from-mode) (region-beginning) (region-end))))
+
+(defun uncrustify-fragment ()
+  (interactive)
+  (save-restriction
+    (widen)
+    (uncrustify-invoke-command (uncrustify-get-lang-from-mode) (region-beginning) (region-end) t)))
 
 (defun uncrustify-buffer ()
   (interactive)
