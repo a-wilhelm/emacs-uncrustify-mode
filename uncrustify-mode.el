@@ -88,11 +88,9 @@
             (end   (or end-in   (point-max)))
             (original-line (uncrustify-point->line (point)))
             (cmd (concat uncrustify-bin " -c " uncrustify-config-path " -l " lang))
-            (out-buf (get-buffer-create "*uncrustify-out*"))
             (error-buf (get-buffer-create "*uncrustify-errors*")))
 
         (with-current-buffer error-buf (erase-buffer))
-        (with-current-buffer out-buf (erase-buffer))
 
         ;; Inexplicably, save-excursion doesn't work to restore the
         ;; point. I'm using it to restore the mark and point and manually
