@@ -105,7 +105,7 @@
                         (zerop ret))
                        ;; Success! Clean up.
                        (progn
-                         (message "Success! uncrustify modify buffer.")
+                         (message "Success! uncrustify modified buffer.")
                          (kill-buffer error-buf)
                          t)
                      ;; Oops! Show our error and give back the text that
@@ -119,7 +119,7 @@
           ;; removed otherwise.  I hate this bug. It makes things so ugly.
           (goto-line original-line)
           (not result)))
-    (message "uncrustify not support this mode : %s" major-mode)))
+    (message "uncrustify does not support this mode : %s" major-mode)))
 
 (defun uncrustify ()
   (interactive)
@@ -148,7 +148,7 @@
   "Automatically `uncrustify' when saving."
   :lighter " Uncrustify"
   (if (not (uncrustify-get-lang-from-mode))
-      (message "uncrustify not support this mode : %s" major-mode)
+      (message "uncrustify does not support this mode : %s" major-mode)
   (if (version<= "24" emacs-version)
     (if uncrustify-mode
         (add-hook 'write-file-hooks 'uncrustify-write-hook nil t)
