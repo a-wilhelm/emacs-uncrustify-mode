@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2012  tabi
 ;; Author: Tabito Ohtani <koko1000ban@gmail.com>
-;; Version: 0.01
+;; Version: 0.02
 ;; Keywords: uncrustify
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -29,9 +29,10 @@
 ;;        (uncrustify-mode 1)))
 
 ;;; ChangeLog:
-;; * 0.0.1:
+;; * 0.01:
 ;;   Initial version.
-
+;; * 0.02:
+;;   Added uncrustify-fragment().
 
 ;; case
 (eval-when-compile
