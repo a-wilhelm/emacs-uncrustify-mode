@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2012  tabi
 ;; Author: Tabito Ohtani <koko1000ban@gmail.com>
-;; Version: 0.02
+;; Version: 0.03
 ;; Keywords: uncrustify
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,9 @@
 ;;   Initial version.
 ;; * 0.02:
 ;;   Added uncrustify-fragment().
+;; * 0.3:
+;;   Modernize; remove support for versions < 24, clean up warnings.
+;;   Add C# to supported language list.
 
 ;;; Variables:
 
