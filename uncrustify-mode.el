@@ -34,10 +34,6 @@
 ;; * 0.02:
 ;;   Added uncrustify-fragment().
 
-;; case
-(eval-when-compile
-  (require 'cl))
-
 ;;; Variables:
 
 (defcustom uncrustify-config-path
@@ -58,7 +54,7 @@
 (defun uncrustify-get-lang-from-mode (&optional mode)
   "uncrustify lang option"
   (let ((m (or mode major-mode)))
-    (case m
+    (cl-case m
       ('c-mode "C")
       ('c++-mode "CPP")
       ('d-mode "D")
@@ -77,7 +73,7 @@
         (original-point (point)))
     (goto-char (point-min))
     (while (< (point) point)
-      (incf line)
+      (cl-incf line)
       (forward-line))
     (goto-char original-point)
     line))
@@ -114,9 +110,9 @@
                               (message "uncrustify error: <%s> <%s>" ret (buffer-string)))
                             nil))))))
 
-          ;; This goto-line is outside the save-excursion becuase it'd get
+          ;; This forward-line is outside the save-excursion becuase it'd get
           ;; removed otherwise.  I hate this bug. It makes things so ugly.
-          (goto-line original-line)
+          (forward-line original-line)
           (not result)))
     (message "uncrustify does not support this mode : %s" major-mode)))
 
@@ -143,7 +139,7 @@
 (defun uncrustify-write-hook ()
   "Uncrustifys a buffer during `write-file-hooks' for `uncrustify-mode'.
    if uncrustify returns not nil then the buffer isn't saved."
-  (if uncrustify-mode
+  (if (bound-and-true-p uncrustify-mode)
       (save-restriction
         (widen)
         (uncrustify-invoke-command (uncrustify-get-lang-from-mode) (point-min) (point-max)))))
@@ -154,13 +150,9 @@
   :lighter " Uncrustify"
   (if (not (uncrustify-get-lang-from-mode))
       (message "uncrustify does not support this mode : %s" major-mode)
-  (if (version<= "24" emacs-version)
     (if uncrustify-mode
-        (add-hook 'write-file-hooks 'uncrustify-write-hook nil t)
-      (remove-hook 'uncrustify-write-hook t))
-    (make-local-hook 'write-file-hooks)
-    (funcall (if uncrustify-mode #'add-hook #'remove-hook)
-             'write-file-hooks 'uncrustify-write-hook))))
+        (add-hook 'write-file-functions 'uncrustify-write-hook nil t)
+      (remove-hook 'write-file-functions 'uncrustify-write-hook t))))
 
 (provide 'uncrustify-mode)
 
