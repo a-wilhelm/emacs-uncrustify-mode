@@ -55,43 +55,24 @@
   "uncrustify lang option"
   (let ((m (or mode major-mode)))
     (cl-case m
-      ('c-mode "C")
-      ('c++-mode "CPP")
-      ('d-mode "D")
-      ('java-mode "JAVA")
-      ('objc-mode "OC")
+      (c-mode "C")
+      (c++-mode "CPP")
+      (d-mode "D")
+      (java-mode "JAVA")
+      (objc-mode "OC")
       (t
        nil))))
-
-(defun uncrustify-point->line (point)
-  "Get the line number that POINT is on."
-  ;; I'm not bothering to use save-excursion because I think I'm
-  ;; calling this function from inside other things that are likely to
-  ;; use that and all I really need to do is restore my current
-  ;; point. So that's what I'm doing manually.
-  (let ((line 1)
-        (original-point (point)))
-    (goto-char (point-min))
-    (while (< (point) point)
-      (cl-incf line)
-      (forward-line))
-    (goto-char original-point)
-    line))
 
 (defun uncrustify-invoke-command (lang start-in end-in &optional fragment)
   "Run uncrustify on the current region or buffer."
   (if lang
       (let ((start (or start-in (point-min)))
             (end   (or end-in   (point-max)))
-            (original-line (uncrustify-point->line (point)))
             (cmd (concat uncrustify-bin " -c " uncrustify-config-path " -l " lang (if fragment " --frag ")))
             (error-buf (get-buffer-create "*uncrustify-errors*")))
 
         (with-current-buffer error-buf (erase-buffer))
 
-        ;; Inexplicably, save-excursion doesn't work to restore the
-        ;; point. I'm using it to restore the mark and point and manually
-        ;; navigating to the proper new-line.
         (let ((result
                (save-excursion
                  (let ((ret (shell-command-on-region start end cmd t t error-buf nil)))
@@ -110,9 +91,6 @@
                               (message "uncrustify error: <%s> <%s>" ret (buffer-string)))
                             nil))))))
 
-          ;; This forward-line is outside the save-excursion becuase it'd get
-          ;; removed otherwise.  I hate this bug. It makes things so ugly.
-          (forward-line original-line)
           (not result)))
     (message "uncrustify does not support this mode : %s" major-mode)))
 
