@@ -58,6 +58,7 @@
       (c-mode "C")
       (c++-mode "CPP")
       (d-mode "D")
+      (csharp-mode "CS")
       (java-mode "JAVA")
       (objc-mode "OC")
       (t
